@@ -164,11 +164,12 @@ for (i in 1:nrow(Integrated)) {
     Integrated$CreditRating[i] = 50
   }
 }
-
+Integrated$Profitability = Integrated$`Return on Capital Employed - %`
 
 Renewables = Integrated
 reg_Ren = lm(NDtoE ~
                Size+
+               Profitability+
                Tangibility+
                GrowthO+
                TaxRate+
@@ -180,7 +181,11 @@ reg_Ren = lm(NDtoE ~
 
 mean(Renewables$CreditRating)
 mean(Renewables$TaxRate,na.rm = TRUE)
+vif(reg_Ren)
 summary(reg_Ren)
 
 mean(Renewables$TaxRate[Renewables$TaxRate>0],na.rm=TRUE)
 mean(Renewables$`PPE - Net Percentage of Total Assets`,na.rm = TRUE)
+
+
+# Hei eirik! Får du dette?
