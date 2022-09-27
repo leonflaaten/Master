@@ -30,13 +30,13 @@ Integrated$Tangibility = Integrated$`PPE - Net Percentage of Total Assets`
 Integrated$GrowthO = Integrated$`Market Capitalization`/Integrated$`Total Assets`
 Integrated$TaxRate = Integrated$`Tax Rate - Actual`
 Integrated$DtoE = Integrated$`Total Debt Percentage of Total Equity`/100
+Integrated$RnDInt = Integrated$`Research And Development`/Integrated$`Total Revenue`
 
 #Integrated = Integrated %>% filter(Instrument != "PETR4.SA")
 
 # just to check, cant just remove all N/a and replace with 0.
 Integrated[is.na(Integrated)] = 0
 Integrated[Integrated=="Inf"] = 0
-Integrated[Integrated=="-Inf"] = 0
 
 
 #Majors = Integrated %>% filter(`Company Common Name`==c("Eni SPA","Equinor ASA","Shell PLC","BP PLC","Chevron Corp","Exxon Mobil Corp","TotalEnergies SE"))
@@ -168,6 +168,9 @@ for (i in 1:nrow(Integrated)) {
 Integrated$Profitability = Integrated$`Return on Capital Employed - %`
 
 Renewables = Integrated
+
+Renewables$RnDInt[Renewables$RnDInt=="Inf"] = 1
+
 reg_Ren = lm(NDtoE ~
                Size+
                Profitability+
@@ -175,9 +178,10 @@ reg_Ren = lm(NDtoE ~
                GrowthO+
                TaxRate+
                OilPrice+
-               CreditRating
+               RnDInt
+               #CreditRating
              ,
-             data = Renewables
+             data = RnDREn
 )
 
 mean(Renewables$CreditRating)
@@ -188,5 +192,8 @@ summary(reg_Ren)
 mean(Renewables$TaxRate[Renewables$TaxRate>0],na.rm=TRUE)
 mean(Renewables$`PPE - Net Percentage of Total Assets`,na.rm = TRUE)
 
+mean(Renewables$RnDInt,na.rm = TRUE)
 
-# Hei eirik! Får du dette?
+
+RnDREn = Renewables %>% filter(!is.na(RnDInt))
+mean(RnDREn$RnDInt)
