@@ -74,8 +74,9 @@ Integrated$OilPrice = 0
 #This needs to be changed after which columns number the columns have.
 for(j in 1:nrow(OilPrice)) {
   for(i in 1:nrow(Integrated)){
-    if (identical(OilPrice[j,1],Integrated[i,16])) {
-      Integrated[i,23] = OilPrice[j,2]
+    if (identical(OilPrice$Year[j],Integrated$Year[i])) {
+      Integrated$OilPrice[i] = OilPrice$Price[j]
+      #Integrated[i,23] = OilPrice[j,2]
     }
   }
 }
